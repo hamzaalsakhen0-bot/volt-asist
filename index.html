@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f1f22"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="VOLT ASIST"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>VOLT ASIST - Teklif Sistemi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f3ef;--card:#fff;--ink:#14213d;--mut:#6b7691;--navy:#1f1f22;--amber:#d4a53c;--ok:#1f9d55;--line:#e6e1d8;--bad:#d64545;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121214;--card:#1b1b1e;--ink:#eeeeee;--mut:#a0a0a8;--navy:#2a2a2e;--line:#2f2f34}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:15px;padding-bottom:84px}
+header{background:var(--navy);color:#fff;padding:14px 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;align-items:center}
+header b{font-size:18px;font-weight:800}header b i{color:var(--amber);font-style:normal}header span{font-size:13px;opacity:.85}
+main{max-width:640px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+h3{margin:0 0 10px;font-size:15px}
+label{display:block;font-size:13px;color:var(--mut);margin:8px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:11px 14px;background:var(--navy);color:#fff;font-weight:700}
+button.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}button.ok{background:var(--ok)}button.wa{background:#25d366;color:#07351a}button.bad{background:transparent;color:var(--bad);padding:6px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.sp{justify-content:space-between}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stats .card{margin:0}.stats b{font-size:22px;display:block}.stats span{color:var(--mut);font-size:13px}
+.it{border-top:1px solid var(--line);padding:10px 0}.it:first-of-type{border:0}
+.it .t{display:flex;justify-content:space-between;gap:8px;font-weight:700}.it small{color:var(--mut);font-weight:400}
+.lv{display:flex;gap:6px;margin-top:8px}.lv button{padding:7px;font-size:13px;background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.lv button.on{background:var(--amber);color:#14213d;border-color:var(--amber)}
+.qty{display:flex;align-items:center;gap:6px;margin-top:8px}.qty button{width:38px;flex:none}.qty input{text-align:center}
+.pick{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:8px}
+.pick div{padding:10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;cursor:pointer;gap:8px;align-items:center}
+.pick div:active{background:var(--bg)}.pick small{color:var(--mut);white-space:nowrap}.pick h4{margin:0;padding:6px 10px;background:var(--bg);font-size:12px;color:var(--mut)}
+.tot div{display:flex;justify-content:space-between;padding:5px 0}.tot .g{font-size:20px;font-weight:800;color:var(--ok);border-top:2px solid var(--line);margin-top:6px;padding-top:10px}
+nav{position:fixed;bottom:0;inset-inline:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:6}
+nav button{flex:1;background:none;color:var(--mut);border-radius:0;padding:12px 4px;font-size:13px}nav button.on{color:var(--navy);box-shadow:inset 0 3px var(--amber)}
+@media(prefers-color-scheme:dark){nav button.on{color:#fff}}
+.badge{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bg);color:var(--mut)}
+.empty{text-align:center;color:var(--mut);padding:24px}
+.pe{display:grid;grid-template-columns:1fr 84px 84px;gap:6px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}.pe input{padding:7px;text-align:center}
+input[type=checkbox]{width:auto}#pr{display:none}
+@media print{body>*:not(#pr){display:none!important}#pr{display:block!important;color:#000;background:#fff;padding:20px}
+#pr table{width:100%;border-collapse:collapse;margin:12px 0}#pr td,#pr th{border:1px solid #bbb;padding:6px;text-align:left;font-size:13px}#pr th{background:#eee}#pr td.r,#pr th.r{text-align:right}}
+</style>
+</head>
+<body>
+<header><b>VOLT <i>ASIST</i></b><span id="ttl"></span></header>
+<main id="m"></main>
+<div id="pr"></div>
+<nav>
+<button data-t="home">Teklifler</button><button data-t="new">+ Yeni Teklif</button><button data-t="prices">Fiyat Listesi</button>
+</nav>
+<script>
+const RAW=`1|Buat montajı|350|500|adet
+1|Duvar içi PVC boru döşeme|100|160|m
+1|Boru içine kablo çekme|40|70|m
+1|Kanal açma|200|350|m
+1|Kanal kapatma|150|300|m
+1|Priz montajı|600|1000|adet
+1|Anahtar montajı|500|850|adet
+1|Trifaze priz montajı|1200|2000|adet
+1|Klima hattı|1500|2500|hat
+1|TV prizi|600|900|adet
+1|İnternet prizi|600|1000|adet
+1|Telefon prizi|500|800|adet
+1|Zil montajı|600|1000|adet
+1|Spot montajı|500|800|adet
+1|LED armatür|500|800|adet
+1|Avize|1000|2500|adet
+1|Tavan vantilatörü|1500|3000|adet
+1|Aspiratör|800|1500|adet
+1|Hareket sensörü|800|1500|adet
+1|Duman dedektörü|700|1400|adet
+1|Kamera|1500|3000|adet
+1|12'li pano|5000|8000|adet
+1|24'lü pano|8000|14000|adet
+1|MCB|400|700|adet
+1|RCD|800|1500|adet
+1|SPD|1000|1800|adet
+1|Devre testi|2000|5000|test
+1|Topraklama ölçümü|2000|5000|ölçüm
+1|Topraklama sistemi|10000|30000|sistem
+1|Aydınlatma direği|2500|6000|adet
+1|Sokak armatürü|3000|7000|adet
+1|Yeraltı kablosu|100|300|m
+1|Jeneratör|12000|35000|adet
+1|ATS|10000|25000|adet
+1|UPS|6000|25000|adet
+1|Endüstriyel pano|18000|60000|adet
+1|VFD|6000|18000|adet
+2|2+1 daire (komple işçilik)|40000|65000|daire
+2|3+1 daire (komple işçilik)|50000|90000|daire
+2|Villa (komple işçilik)|80000|200000|villa
+2|100 m² Ofis (komple işçilik)|50000|100000|ofis
+2|100 m² İşyeri (komple işçilik)|60000|140000|işyeri
+3|Keşif|750|1500|ziyaret
+3|Saatlik işçilik|1000|1500|saat
+3|Günlük işçilik|6000|9000|gün
+4|Servis ücreti (ilçe içi)|1200|1800|sefer
+4|Servis ücreti (ilçe dışı / uzak bölge)|1800|2500|sefer
+4|Arıza tespit (basit arızalar)|1200|2000|adet
+4|Arıza tespit (karmaşık arızalar)|2000|3500|adet
+4|Termal kamera ile arıza tespiti|3000|5000|adet
+4|Elektrik projesi keşif ve fiyatlandırma|4000|12000|proje
+5|Tekli priz montajı|700|1000|adet
+5|Topraklı priz montajı|800|1200|adet
+5|Çiftli priz montajı|1000|1500|adet
+5|Anahtar montajı (tekli)|700|1000|adet
+5|Komütatör / vavien anahtar|900|1400|adet
+5|Dimmer (ışık ayar anahtarı)|1200|2000|adet
+5|Priz + anahtar birlikte|1500|2200|takım
+5|Avize montajı (basit)|1200|2000|adet
+5|Avize montajı (büyük, çok katlı)|2500|4500|adet
+5|Spot armatür montajı|800|1500|adet
+5|LED panel montajı|1000|1800|adet
+5|Bahçe aydınlatma montajı|1200|2000|adet
+5|Sensörlü armatür montajı|1200|2000|adet
+6|Otomatik sigorta değişimi|800|1400|adet
+6|Kaçak akım rölesi değişimi|1250|2000|adet
+6|Parafudr montajı|1800|3000|adet
+6|Dağıtım panosu düzenleme|2500|4000|adet
+6|Sıva üstü küçük pano montajı|2500|4000|adet
+6|Sıva altı pano montajı|3500|6000|adet
+6|Komple daire sigorta kutusu yenileme|6000|12000|adet
+6|Yönetim panosu montajı (site, işyeri)|10000|20000|adet
+6|Kompanzasyon panosu montajı|15000|30000|adet
+7|1,5 mm² kablo çekimi|300|550|m
+7|2,5 mm² kablo çekimi|300|500|m
+7|4 mm² kablo çekimi|400|700|m
+7|6 mm² kablo çekimi|550|850|m
+7|10 mm² kablo çekimi|750|1200|m
+7|16 mm² kablo çekimi|1000|1600|m
+7|Trifaze besleme hattı çekimi|1500|2200|m
+8|Yeni priz hattı çekimi|2500|4500|hat
+8|Yeni aydınlatma hattı çekimi|2000|4000|hat
+8|Tadilat (mevcut hat yenileme)|3000|6000|hat
+8|Daire komple elektrik tesisatı (100–150 m²)|55000|110000|daire
+8|Villa / müstakil ev tesisatı|110000|200000|proje
+8|Dükkan / ofis tesisatı|75000|150000|proje
+8|Şantiye geçici elektrik tesisatı|30000|60000|proje
+9|Topraklama hattı çekimi|300|550|m
+9|Topraklama kazığı montajı|2000|3000|adet
+9|Topraklama ölçümü (raporlu)|2500|4000|ölçüm
+9|Paratoner bağlantısı|2500|4000|adet
+9|Eş potansiyel barası montajı|2000|3500|adet
+10|Data (internet) hattı çekimi|1500|2800|hat
+10|TV hattı çekimi|1200|2200|hat
+10|Telefon hattı çekimi|1200|2200|hat
+10|Kamera kablo çekimi|1500|2800|hat
+10|Alarm sistemi kablo çekimi|1500|2800|hat
+10|Uydu sistemi kurulumu|2500|4500|takım
+10|Kapı otomatiği bağlantısı|2500|4000|adet`;
+const CAT={1:'Diğer Elektrik İşleri · أعمال كهرباء أخرى',2:'Konut / Ticari Projeler · مشاريع كاملة',3:'Ek Ücretler · رسوم إضافية',4:'Servis, Keşif ve Arıza Tespit · الخدمة والكشف والأعطال',5:'Priz, Anahtar ve Aydınlatma · بريزات ومفاتيح وإنارة',6:'Sigorta, Pano ve Şalt · قواطع ولوحات',7:'Elektrik Hattı Çekimi (metre) · سحب الكابلات (بالمتر)',8:'Yeni Hat, Tadilat ve İnşaat · خطوط جديدة وترميم وتمديدات',9:'Topraklama ve Ölçüm · التأريض والقياس',10:'Zayıf Akım Sistemleri · التيار الخفيف',11:'Ek Kalemler (tahmini fiyat) · بنود إضافية (سعر تقديري)',12:'Özel Kalemler · بنود خاصة'};
+const UA={adet:'قطعة',m:'متر',hat:'خط',test:'فحص',ölçüm:'قياس',sistem:'نظام',sefer:'زيارة',proje:'مشروع',takım:'طقم',daire:'شقة',ziyaret:'زيارة',saat:'ساعة',gün:'يوم'};
+const EXTRA=`11|Gizli LED şerit montajı (alçıpan / kartonpiyer)|150|300|m
+11|LED şerit trafo / sürücü bağlantısı|500|900|adet
+11|Ray spot sistemi montajı|300|600|m
+11|LED projektör montajı|1000|2000|adet
+11|Kablo tavası / PVC kablo kanalı montajı|150|300|m
+11|Fırın / ocak elektrik bağlantısı|800|1500|adet
+11|Termosifon / boyler elektrik bağlantısı|800|1500|adet
+11|Elektrikli araç şarj istasyonu kurulumu|6000|12000|adet
+11|Diyafon / görüntülü diyafon montajı|2000|4000|adet
+11|Alarm sistemi merkez + sensör kurulumu|3000|6000|takım
+11|Kamera kayıt cihazı (NVR/DVR) kurulumu|2500|5000|adet
+11|Sayaç panosu bağlantısı|3000|5000|adet`;
+const DEL=new Set(['Priz montajı','Anahtar montajı','Spot montajı','Avize','MCB','RCD','SPD','Topraklama ölçümü','Villa (komple işçilik)','100 m² Ofis (komple işçilik)','100 m² İşyeri (komple işçilik)']);
+const AR=`Buat montajı|تركيب علبة تفريع (Buat)
+Duvar içi PVC boru döşeme|تمديد أنبوب PVC داخل الجدار
+Boru içine kablo çekme|سحب كابل داخل الأنبوب
+Kanal açma|فتح مجرى (قص الجدار)
+Kanal kapatma|سد المجرى
+Trifaze priz montajı|تركيب بريزة ثلاثية الفاز
+Klima hattı|خط مكيف
+TV prizi|بريزة تلفزيون
+İnternet prizi|بريزة إنترنت
+Telefon prizi|بريزة هاتف
+Zil montajı|تركيب جرس
+LED armatür|تركيب إنارة LED
+Tavan vantilatörü|مروحة سقف
+Aspiratör|شفاط
+Hareket sensörü|حساس حركة
+Duman dedektörü|كاشف دخان
+Kamera|تركيب كاميرا
+12'li pano|لوحة كهرباء 12 خط
+24'lü pano|لوحة كهرباء 24 خط
+Devre testi|فحص الدارات
+Topraklama sistemi|نظام تأريض
+Aydınlatma direği|عمود إنارة
+Sokak armatürü|إنارة شوارع
+Yeraltı kablosu|كابل أرضي
+Jeneratör|مولدة
+ATS|ATS (تحويل تلقائي)
+UPS|UPS
+Endüstriyel pano|لوحة صناعية
+VFD|VFD (محرك متغير السرعة)
+2+1 daire (komple işçilik)|شقة 2+1 (أجور كاملة)
+3+1 daire (komple işçilik)|شقة 3+1 (أجور كاملة)
+Keşif|كشف ومعاينة
+Saatlik işçilik|أجر بالساعة
+Günlük işçilik|أجر يومي
+Servis ücreti (ilçe içi)|أجرة زيارة (داخل المنطقة)
+Servis ücreti (ilçe dışı / uzak bölge)|أجرة زيارة (خارج المنطقة / بعيدة)
+Arıza tespit (basit arızalar)|تحديد عطل (أعطال بسيطة)
+Arıza tespit (karmaşık arızalar)|تحديد عطل (أعطال معقدة)
+Termal kamera ile arıza tespiti|كشف أعطال بالكاميرا الحرارية
+Elektrik projesi keşif ve fiyatlandırma|معاينة مشروع كهرباء وتسعيره
+Tekli priz montajı|تركيب بريزة مفردة
+Topraklı priz montajı|تركيب بريزة مؤرضة
+Çiftli priz montajı|تركيب بريزة مزدوجة
+Anahtar montajı (tekli)|تركيب مفتاح (مفرد)
+Komütatör / vavien anahtar|مفتاح تبديل (فافيان)
+Dimmer (ışık ayar anahtarı)|مفتاح دايمر (تعتيم)
+Priz + anahtar birlikte|بريزة + مفتاح معاً
+Avize montajı (basit)|تركيب ثريا (بسيطة)
+Avize montajı (büyük, çok katlı)|تركيب ثريا (كبيرة متعددة الطوابق)
+Spot armatür montajı|تركيب سبوت
+LED panel montajı|تركيب لوحة LED
+Bahçe aydınlatma montajı|تركيب إنارة حديقة
+Sensörlü armatür montajı|تركيب إنارة بحساس
+Otomatik sigorta değişimi|تبديل قاطع أوتوماتيك
+Kaçak akım rölesi değişimi|تبديل قاطع تسرّب (RCD)
+Parafudr montajı|تركيب حماية صواعق (Parafudr)
+Dağıtım panosu düzenleme|ترتيب لوحة توزيع
+Sıva üstü küçük pano montajı|تركيب لوحة صغيرة ظاهرة
+Sıva altı pano montajı|تركيب لوحة مخفية (داخل الجدار)
+Komple daire sigorta kutusu yenileme|تجديد لوحة القواطع لشقة كاملة
+Yönetim panosu montajı (site, işyeri)|تركيب لوحة إدارة (موقع / محل)
+Kompanzasyon panosu montajı|تركيب لوحة تعويض (Kompanzasyon)
+1,5 mm² kablo çekimi|سحب كابل 1.5 مم²
+2,5 mm² kablo çekimi|سحب كابل 2.5 مم²
+4 mm² kablo çekimi|سحب كابل 4 مم²
+6 mm² kablo çekimi|سحب كابل 6 مم²
+10 mm² kablo çekimi|سحب كابل 10 مم²
+16 mm² kablo çekimi|سحب كابل 16 مم²
+Trifaze besleme hattı çekimi|سحب خط تغذية ثلاثي الفاز
+Yeni priz hattı çekimi|مد خط بريزة جديد
+Yeni aydınlatma hattı çekimi|مد خط إنارة جديد
+Tadilat (mevcut hat yenileme)|تجديد خط موجود (ترميم)
+Daire komple elektrik tesisatı (100–150 m²)|تمديدات كهرباء شقة كاملة (100–150 م²)
+Villa / müstakil ev tesisatı|تمديدات فيلا / بيت مستقل
+Dükkan / ofis tesisatı|تمديدات محل / مكتب
+Şantiye geçici elektrik tesisatı|كهرباء مؤقتة للورشة
+Topraklama hattı çekimi|مد خط تأريض
+Topraklama kazığı montajı|تركيب وتد تأريض
+Topraklama ölçümü (raporlu)|قياس التأريض (مع تقرير)
+Paratoner bağlantısı|ربط مانعة صواعق
+Eş potansiyel barası montajı|تركيب قضيب تساوي الجهد
+Data (internet) hattı çekimi|مد خط إنترنت (Data)
+TV hattı çekimi|مد خط تلفزيون
+Telefon hattı çekimi|مد خط هاتف
+Kamera kablo çekimi|سحب كابل كاميرا
+Alarm sistemi kablo çekimi|سحب كابل نظام إنذار
+Uydu sistemi kurulumu|تركيب نظام ستالايت
+Kapı otomatiği bağlantısı|ربط أتمتة الباب
+Gizli LED şerit montajı (alçıpan / kartonpiyer)|تمديد شريط ليد مخفي (جبس / كورنيش)
+LED şerit trafo / sürücü bağlantısı|ربط محوّل / درايفر شريط الليد
+Ray spot sistemi montajı|تركيب نظام سبوت على سكة (Ray)
+LED projektör montajı|تركيب كشاف LED
+Kablo tavası / PVC kablo kanalı montajı|تركيب سلّم كابلات / مجرى PVC
+Fırın / ocak elektrik bağlantısı|توصيل كهرباء الفرن / الموقد
+Termosifon / boyler elektrik bağlantısı|توصيل كهرباء سخان الماء (بويلر)
+Elektrikli araç şarj istasyonu kurulumu|تركيب محطة شحن سيارة كهربائية
+Diyafon / görüntülü diyafon montajı|تركيب انترفون / فيديو انترفون
+Alarm sistemi merkez + sensör kurulumu|تركيب نظام إنذار (مركز + حساسات)
+Kamera kayıt cihazı (NVR/DVR) kurulumu|تركيب جهاز تسجيل الكاميرات (NVR/DVR)
+Sayaç panosu bağlantısı|ربط لوحة العدّاد`;
+const AM={};AR.split('\n').forEach(l=>{const[a,b]=l.split('|');AM[a]=b});
+const ORD=[4,5,6,7,8,9,10,1,11,2,3];
+const ST={draft:'Taslak',sent:'Gönderildi',won:'Onaylandı',lost:'Reddedildi'};
+const L=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const S=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const V2=L('eq_v',0);let ov=V2?L('eq_p',{}):{},Q=V2?L('eq_q',[]):[],cur=null,co=Object.assign({name:'VOLT ASIST',phone:'0552 274 80 81',nameAr:'',terms:''},L('eq_co',{}));S('eq_v',1);
+const D=(RAW+'\n'+EXTRA).split('\n').map(l=>{const[c,a,lo,hi,u]=l.split('|');return{c:+c,a,lo:+lo,hi:+hi,u}}).filter(d=>!DEL.has(d.a)).sort((x,y)=>ORD.indexOf(x.c)-ORD.indexOf(y.c)).map((d,i)=>({...d,id:i,ar:AM[d.a]||d.a}));
+L('eq_x',[]).forEach(x=>D.push({c:12,a:x.a,ar:x.ar||x.a,lo:x.lo,hi:x.hi,u:x.u,id:D.length,del:x.del}));D.forEach(d=>{if(ov[d.id]){d.lo=ov[d.id][0];d.hi=ov[d.id][1]}});
+const $=s=>document.querySelector(s),n0=n=>Math.round(n).toLocaleString('tr-TR'),f=n=>n0(n)+' ₺';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mid=d=>Math.round((d.lo+d.hi)/2/10)*10;
+const blank=()=>({id:Date.now(),num:'',hide:0,terms:'',client:'',phone:'',project:'',items:[],mat:0,other:0,night:0,disc:0,margin:0,kdv:0,lang:'tr',status:'draft',date:new Date().toLocaleDateString('tr-TR')});
+function calc(q){const k=1+q.margin/100,lab=q.items.reduce((s,i)=>s+i.q*i.p,0),nt=lab*q.night/100,cost=lab+nt+q.mat+q.other,sell=cost*k,disc=sell*q.disc/100,net=sell-disc,kdv=net*q.kdv/100;return{k,lab,nt,cost,sell,disc,net,kdv,fin:net+kdv}}
+const save=()=>S('eq_q',Q);
+function go(t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
+$('#ttl').textContent={home:'Teklifler',new:'Yeni Teklif',prices:'Fiyat Listesi'}[t];
+if(t=='new'&&!cur)cur=blank();({home:home,new:build,prices:prices})[t]();window.scrollTo(0,0)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
+let HS='',HF='';
+function home(){const tot=Q.reduce((s,q)=>s+calc(q).fin,0),acc=Q.filter(q=>q.status=='won').length;
+$('#m').innerHTML=`<div class="stats"><div class="card"><b>${Q.length}</b><span>Toplam teklif</span></div><div class="card"><b>${acc}</b><span>Onaylanan</span></div><div class="card" style="grid-column:span 2"><b>${f(tot)}</b><span>Toplam teklif tutarı</span></div></div>
+<button style="width:100%;margin-bottom:12px" onclick="cur=blank();go('new')">+ Yeni Teklif Oluştur</button>
+<div class="row" style="margin-bottom:12px"><input id="hs" placeholder="🔍 Müşteri / proje / teklif no" value="${esc(HS)}" style="flex:2"><select id="hf"><option value="">Tümü</option>${Object.keys(ST).map(k=>`<option value="${k}">${ST[k]}</option>`).join('')}</select></div><div id="hl"></div>`;
+$('#hf').value=HF;$('#hs').oninput=e=>{HS=e.target.value;hl()};$('#hf').onchange=e=>{HF=e.target.value;hl()};hl()}
+function hl(){const s=HS.trim().toLocaleLowerCase('tr'),l=Q.slice().reverse().filter(q=>(!HF||q.status==HF)&&(!s||((q.client||'')+' '+(q.project||'')+' '+(q.num||'')).toLocaleLowerCase('tr').includes(s)));
+$('#hl').innerHTML=l.length?l.map(q=>`<div class="card"><div class="row sp"><b>${esc(q.client)||'İsimsiz müşteri'}</b><span class="badge">${ST[q.status]}</span></div>
+<small style="color:var(--mut)">${q.num?esc(q.num)+' · ':''}${esc(q.project)} · ${q.date}</small><div style="font-size:19px;font-weight:800;margin:6px 0">${f(calc(q).fin)}</div>
+<div class="row"><button class="sec" onclick="op(${q.id})">Aç</button><button class="sec" onclick="dup(${q.id})">Kopyala</button><button class="sec" onclick="st(${q.id})">Durum</button><button class="bad" onclick="rm(${q.id})">Sil</button></div></div>`).join(''):'<div class="empty">'+(Q.length?'Sonuç bulunamadı':'Henüz teklif yok. İlk teklifinizi oluşturun.')+'</div>'}
+const op=id=>{cur=JSON.parse(JSON.stringify(Q.find(q=>q.id==id)));go('new')};
+const dup=id=>{cur=JSON.parse(JSON.stringify(Q.find(q=>q.id==id)));cur.id=Date.now();cur.num='';cur.status='draft';cur.date=new Date().toLocaleDateString('tr-TR');go('new')};
+const rm=id=>{if(confirm('Teklif silinsin mi?')){Q=Q.filter(q=>q.id!=id);save();home()}};
+const st=id=>{const q=Q.find(x=>x.id==id),o=Object.keys(ST);q.status=o[(o.indexOf(q.status)+1)%4];save();home()};
+function build(){const q=cur;
+$('#m').innerHTML=`<div class="card"><label>Müşteri</label><input id="cl" value="${esc(q.client)}" placeholder="Müşteri adı / firma"><label>Müşteri telefonu (WhatsApp için)</label><input id="ph" type="tel" inputmode="tel" value="${esc(q.phone)}" placeholder="05xx xxx xx xx"><label>Teklif dili · لغة العرض</label><select id='lg'><option value='tr'>Türkçe</option><option value='ar'>العربية</option></select><label>Proje adı</label><input id="pj" value="${esc(q.project)}" placeholder="Örn: 3+1 daire - Çankaya"></div>
+<div class="card"><h3>Kalemler</h3><div>${q.items.length?q.items.map((i,x)=>{const d=D[i.k];return`<div class="it"><div class="t"><span>${d.a}<br><small>${d.ar}<br>${n0(d.lo)}–${n0(d.hi)} ₺ / ${d.u}</small></span><button class="bad" onclick="del(${x})">✕</button></div>
+<div class="qty"><button onclick="qt(${x},-1)">−</button><input type="number" inputmode="decimal" value="${i.q}" onchange="qs(${x},this.value)"><button onclick="qt(${x},1)">+</button><input type="number" inputmode="numeric" value="${i.p}" onchange="ps(${x},this.value)" style="flex:2"></div>
+<div class="lv">${[['En düşük',d.lo],['Orta',mid(d)],['En yüksek',d.hi]].map(([n,v])=>`<button class="${i.p==v?'on':''}" onclick="ps(${x},${v})">${n}</button>`).join('')}</div>
+<div style="text-align:right;margin-top:6px;font-weight:700">${f(i.q*i.p)}</div></div>`}).join(''):'<div class="empty">Aşağıdaki listeden kalem ekleyin</div>'}</div>
+<input id="sr" placeholder="🔍 Kalem ara (priz, kamera, pano...)" oninput="fl()"><div class="pick" id="pk"></div></div>
+<div class="card"><h3>Malzeme ve Ek Ayarlar</h3><label>Malzeme bedeli (₺)</label><input type="number" inputmode="numeric" id="mt" value="${q.mat||''}" placeholder="0">
+<label>Diğer giderler: nakliye vb. (₺)</label><input type="number" inputmode="numeric" id="ot" value="${q.other||''}" placeholder="0">
+<label>Gece / acil iş farkı</label><select id="ng"><option value="0">Yok</option><option value="50">+%50</option><option value="75">+%75</option><option value="100">+%100</option></select>
+<div class="row"><div><label>Kâr marjı (%) · müşteriye gösterilmez</label><input type="number" inputmode="decimal" id="mg" value="${q.margin||''}" placeholder="0"></div><div><label>İndirim (%)</label><input type="number" inputmode="decimal" id="ds" value="${q.disc||''}" placeholder="0"></div></div>
+<label>KDV</label><select id="kd"><option value="0">KDV hariç</option><option value="10">KDV %10</option><option value="20">KDV %20</option></select>
+<label style="display:flex;gap:8px;align-items:center;margin-top:12px;color:var(--ink)"><input type="checkbox" id="hd"> Müşteriye sadece genel toplamı göster (kalem fiyatları gizli)</label>
+<label>Notlar / şartlar (boşsa varsayılan metin kullanılır)</label><textarea id="tm" rows="3" placeholder="Örn: %50 peşin, kalan iş bitiminde. 1 yıl işçilik garantisi.">${esc(q.terms)}</textarea></div>
+<div class="card tot" id="tt"></div>
+<button class="wa" style="width:100%;margin-bottom:8px" onclick="wa()">WhatsApp ile Detaylı Teklif Gönder</button>
+<div class="row"><button class="ok" onclick="sv()">Teklifi Kaydet</button><button onclick="pdf()">PDF / Yazdır</button></div>`;
+$('#ng').value=q.night;$('#kd').value=q.kdv;$('#lg').value=q.lang||'tr';$('#hd').checked=!!q.hide;$('#hd').onchange=e=>q.hide=e.target.checked?1:0;$('#tm').oninput=e=>q.terms=e.target.value;$('#lg').onchange=e=>q.lang=e.target.value;
+[['cl','client'],['ph','phone'],['pj','project']].forEach(([a,b])=>$('#'+a).oninput=e=>q[b]=e.target.value);
+[['mt','mat'],['ot','other'],['mg','margin'],['ds','disc']].forEach(([a,b])=>$('#'+a).oninput=e=>{q[b]=+e.target.value||0;tot()});
+$('#ng').onchange=e=>{q.night=+e.target.value;tot()};$('#kd').onchange=e=>{q.kdv=+e.target.value;tot()};fl();tot()}
+function tot(){const t=calc(cur),q=cur;$('#tt').innerHTML=`<div><span>İşçilik toplamı</span><b>${f(t.lab)}</b></div>${t.nt?`<div><span>Gece/acil farkı (%${q.night})</span><b>${f(t.nt)}</b></div>`:''}<div><span>Malzeme ve giderler</span><b>${f(q.mat+q.other)}</b></div>${q.margin?`<div><span>Kâr marjı %${q.margin}</span><b>${f(t.sell-t.cost)}</b></div>`:''}${q.disc?`<div><span>İndirim %${q.disc}</span><b>−${f(t.disc)}</b></div>`:''}${q.kdv?`<div><span>KDV %${q.kdv}</span><b>${f(t.kdv)}</b></div>`:''}<div class="g"><span>GENEL TOPLAM</span><span>${f(t.fin)}</span></div>`}
+function fl(){const s=($('#sr').value||'').trim().toLocaleLowerCase('tr');let h='',c='';D.filter(d=>!d.del&&(!s||(d.a+' '+d.ar).toLocaleLowerCase('tr').includes(s))).forEach(d=>{if(d.c!=c){c=d.c;h+=`<h4>${CAT[c]}</h4>`}h+=`<div onclick="add(${d.id})"><span>${d.a}<br><small style='white-space:normal'>${d.ar}</small></span><small>${n0(d.lo)}–${n0(d.hi)} ₺</small></div>`});$('#pk').innerHTML=h||'<div class="empty">Sonuç bulunamadı</div>'}
+const add=k=>{const e=cur.items.find(i=>i.k==k);e?e.q++:cur.items.push({k,q:1,p:mid(D[k])});build()};
+const del=x=>{cur.items.splice(x,1);build()},qt=(x,n)=>{cur.items[x].q=Math.max(1,(+cur.items[x].q||1)+n);build()},qs=(x,v)=>{cur.items[x].q=+v||1;build()},ps=(x,v)=>{cur.items[x].p=+v||0;build()};
+function sv(){ensureNum(cur);const i=Q.findIndex(q=>q.id==cur.id);i>=0?Q[i]=cur:Q.push(cur);save();alert('Teklif kaydedildi ✓');cur=null;go('home')}
+function ensureNum(q){if(!q.num){const n=(+L('eq_n',0))+1;S('eq_n',n);q.num='VA-'+new Date().getFullYear()+'-'+String(n).padStart(3,'0')}return q.num}
+function tel(p){let d=String(p||'').replace(/\D/g,'');if(d.startsWith('00'))d=d.slice(2);else if(d.startsWith('0'))d='90'+d.slice(1);else if(d.length==10)d='90'+d;return d}
+function prices(){let h='<div class="card"><h3>Firma Bilgileri (teklifte görünür)</h3><input id="cn" value="'+esc(co.name)+'" placeholder="Firma adı"><label>Telefon</label><input id="cp" value="'+esc(co.phone)+'"><label>Arapça firma adı · اسم الشركة بالعربي</label><input id="cna" dir="auto" value="'+esc(co.nameAr)+'"><label>Varsayılan notlar / şartlar</label><textarea id="ctm" rows="3" placeholder="Boşsa: Teklif 7 gün geçerlidir...">'+esc(co.terms)+'</textarea></div><div class="card"><h3>Yedekleme · نسخ احتياطي</h3><div class="row"><button class="sec" onclick="bkE()">Yedeği indir</button><button class="sec" onclick="bkf.click()">Yedeği yükle</button></div><input id="bkf" type="file" accept=".json,application/json" style="display:none" onchange="bkI(this)"></div><div class="card"><h3>+ Yeni kalem · بند جديد</h3><input id="nt" placeholder="Türkçe ad (örn: Gizli LED şerit)"><input id="na" placeholder="الاسم بالعربي" style="margin-top:8px"><div class="row" style="margin-top:8px"><input id="nl" type="number" inputmode="numeric" placeholder="Min ₺"><input id="nh" type="number" inputmode="numeric" placeholder="Max ₺"><select id="nu"><option>adet</option><option>m</option><option>hat</option><option>takım</option><option>saat</option><option>gün</option><option>proje</option></select></div><button style="width:100%;margin-top:10px" onclick="addX()">Kalemi Ekle</button></div><div class="card"><h3>Fiyatları piyasaya göre düzenleyin</h3><div class="pe" style="border:0;color:var(--mut);font-size:12px"><span>İş kalemi</span><span>Min ₺</span><span>Max ₺</span></div>',c='';
+D.filter(d=>!d.del).forEach(d=>{if(d.c!=c){c=d.c;h+=`<h4 style="margin:12px 0 0">${CAT[c]}</h4>`}h+=`<div class="pe"><span>${d.a}<br><small style='color:var(--mut)'>${d.ar}</small>${d.c==12?`<br><button class="bad" onclick="delX(${d.id})">Sil</button>`:''}</span><input type="number" inputmode="numeric" value="${d.lo}" data-i="${d.id}" data-w="0"><input type="number" inputmode="numeric" value="${d.hi}" data-i="${d.id}" data-w="1"></div>`});
+$('#m').innerHTML=h+'</div>';
+$('#cn').oninput=e=>{co.name=e.target.value;S('eq_co',co)};$('#cp').oninput=e=>{co.phone=e.target.value;S('eq_co',co)};$('#cna').oninput=e=>{co.nameAr=e.target.value;S('eq_co',co)};$('#ctm').oninput=e=>{co.terms=e.target.value;S('eq_co',co)};
+document.querySelectorAll('.pe input').forEach(i=>i.onchange=()=>{const d=D[i.dataset.i];d[i.dataset.w==0?'lo':'hi']=+i.value;ov[d.id]=[d.lo,d.hi];S('eq_p',ov)})}
+const TX={tr:{t:'TEKLİF',sb:'Hamza · Elektrik Teknisyeni',d:'Tarih',c:'Müşteri',p:'Proje',k:'Kalem Detayı',m:'Malzeme ve diğer giderler',s:'Ara toplam',i:'İndirim',nk:'KDV hariç',k2:'KDV',g:'GENEL TOPLAM',x:' (KDV hariç)',n:'Teklif 7 gün geçerlidir. Nihai fiyat keşif ve iş zorluğuna göre değişebilir.',sg:'Müşteri onayı / imza',h:['#','İş Kalemi','Miktar','Birim Fiyat','Tutar'],dir:'ltr'},ar:{t:'عرض سعر',sb:'حمزة · فني كهرباء',d:'التاريخ',c:'العميل',p:'المشروع',k:'تفاصيل البنود',m:'المواد والمصاريف الأخرى',s:'المجموع الفرعي',i:'الخصم',nk:'المبلغ قبل الضريبة',k2:'ضريبة KDV',g:'المجموع الكلي',x:' (بدون ضريبة KDV)',n:'العرض صالح لمدة 7 أيام. السعر النهائي قد يتغير حسب المعاينة وصعوبة العمل.',sg:'موافقة العميل / التوقيع',h:['#','البند','الكمية','سعر الوحدة','المبلغ'],dir:'rtl'}};
+TX.tr.all='Elektrik işleri (işçilik ve malzeme dahil)';TX.ar.all='أعمال كهربائية (شاملة العمالة والمواد)';TX.tr.no='Teklif No';TX.ar.no='رقم العرض';
+function ln(q){const t=calc(q),l=q.lang||'tr',X=TX[l];ensureNum(q);
+const rows=q.hide?[{a:X.all,q:1,u:'',p:t.sell,s:t.sell,h:1}]:q.items.map(i=>{const d=D[i.k];return{a:l=='ar'?d.ar:d.a,q:i.q,u:l=='ar'?(UA[d.u]||d.u):d.u,p:i.p*t.k,s:i.q*i.p*t.k}});
+return{t,X,rows,other:q.hide?0:(q.mat+q.other+t.nt)*t.k,nm:(l=='ar'&&co.nameAr)?co.nameAr:co.name,nt:(q.terms||co.terms||X.n)}}
+function wa(){if(!cur.items.length){alert('Önce en az bir kalem ekleyin.');return}
+const{t,X,rows,other,nm,nt}=ln(cur),r=cur;let m=`*${X.t} — ${nm}*\n${X.sb}\n`;if(co.phone)m+=`📞 ${co.phone}\n`;
+m+=`\n${X.no}: ${r.num}\n${X.d}: ${r.date}\n${X.c}: ${r.client||'-'}\n${X.p}: ${r.project||'-'}\n\n*${X.k}*\n`;
+rows.forEach((x,i)=>m+=x.h?`${i+1}. ${x.a}\n    = *${f(x.s)}*\n`:`${i+1}. ${x.a}\n    ${x.q} ${x.u} × ${f(x.p)} = *${f(x.s)}*\n`);
+if(other>0)m+=`${rows.length+1}. ${X.m}\n    = *${f(other)}*\n`;
+m+='\n';if(r.disc)m+=`${X.s}: ${f(t.sell)}\n${X.i} (%${r.disc}): −${f(t.disc)}\n`;if(r.kdv)m+=`${X.nk}: ${f(t.net)}\n${X.k2} (%${r.kdv}): ${f(t.kdv)}\n`;
+m+=`*${X.g}: ${f(t.fin)}*${r.kdv?'':X.x}\n\n${nt.includes('\n')?nt:'_'+nt+'_'}`;
+open(`https://wa.me/${tel(r.phone)}?text=${encodeURIComponent(m)}`)}
+function pdf(){if(!cur.items.length){alert('Önce en az bir kalem ekleyin.');return}
+const{t,X,rows,other,nm,nt}=ln(cur),r=cur,al=X.dir=='rtl'?'right':'left',ot=X.dir=='rtl'?'left':'right';
+$('#pr').style.direction=X.dir;$('#pr').style.textAlign=al;
+$('#pr').innerHTML=`<div style='display:flex;justify-content:space-between;gap:12px'><div><img src='icon-192.png' alt='' style='height:56px;display:block;margin-bottom:6px'><h2 style='margin:0'>${esc(nm)}</h2><div>${X.sb}</div><div>📞 ${esc(co.phone)}</div></div><div style='text-align:${ot}'><h2 style='margin:0'>${X.t}</h2><div>${X.no}: <b>${esc(r.num)}</b></div><div>${r.date}</div></div></div>
+<p>${X.c}: <b>${esc(r.client)||'-'}</b><br>${X.p}: <b>${esc(r.project)||'-'}</b></p>
+<table><tr>${X.h.map(h=>`<th style='text-align:${al}'>${h}</th>`).join('')}</tr>
+${rows.map((x,i)=>x.h?`<tr><td>${i+1}</td><td>${x.a}</td><td>—</td><td>—</td><td>${f(x.s)}</td></tr>`:`<tr><td>${i+1}</td><td>${x.a}</td><td>${x.q} ${x.u}</td><td>${f(x.p)}</td><td>${f(x.s)}</td></tr>`).join('')}
+${other>0?`<tr><td>${rows.length+1}</td><td colspan='3'>${X.m}</td><td>${f(other)}</td></tr>`:''}
+${t.disc?`<tr><td colspan='4'>${X.i} (%${r.disc})</td><td>−${f(t.disc)}</td></tr>`:''}
+${r.kdv?`<tr><td colspan='4'>${X.k2} (%${r.kdv})</td><td>${f(t.kdv)}</td></tr>`:''}
+<tr><th colspan='4' style='text-align:${al}'>${X.g}${r.kdv?'':X.x}</th><th style='text-align:${al}'>${f(t.fin)}</th></tr></table>
+<p style='font-size:12px;white-space:pre-line'>${esc(nt)}</p><p style='margin-top:50px'>${X.sg}: ____________________</p>`;setTimeout(()=>print(),100)}
+function bkE(){const d={v:1,q:Q,p:ov,x:L('eq_x',[]),co,n:L('eq_n',0)},a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='volt-asist-yedek-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function bkI(inp){const fl=inp.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.q))throw 0;if(!confirm('Mevcut veriler yedekle değiştirilecek. Devam?'))return;S('eq_q',d.q);S('eq_p',d.p||{});S('eq_x',d.x||[]);S('eq_co',d.co||co);S('eq_n',d.n||0);S('eq_v',1);location.reload()}catch(e){alert('Geçersiz yedek dosyası')}};r.readAsText(fl)}
+function addX(){const a=$('#nt').value.trim(),r=$('#na').value.trim(),lo=+$('#nl').value,hi=+$('#nh').value||lo;if(!a||!lo){alert('Ad ve fiyat (Min ₺) gerekli.');return}
+const x={a,ar:r||a,lo:Math.min(lo,hi),hi:Math.max(lo,hi),u:$('#nu').value},l=L('eq_x',[]);l.push(x);S('eq_x',l);
+D.push({c:12,a:x.a,ar:x.ar,lo:x.lo,hi:x.hi,u:x.u,id:D.length});prices()}
+function delX(id){if(!confirm('Kalem silinsin mi?'))return;const l=L('eq_x',[]);l[id-(D.length-l.length)].del=1;S('eq_x',l);D[id].del=1;prices()}
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+go("home");
+</script>
+</body>
+</html>
